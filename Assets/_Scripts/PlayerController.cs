@@ -4,7 +4,7 @@
 // Last Modified by: Brahm Ramkissoon
 // Date created: 04/10/2015
 // Date last Modified: 
-// File description: 
+// File description: control the player object
 // Revision history: 04/10/2015 - added instantiation of shots
 using UnityEngine;
 using System.Collections;
@@ -24,13 +24,14 @@ public class PlayerController : MonoBehaviour {
     public float zTilt;         // tilt player object on y axis
 
     public GameObject shot;     // laser bolt object
-    public Transform shotSpawn; // location of laser bolt object
+    public Transform shotSpawn; // spawn location of laser bolt object
 
     public float fireRate;      // rate of fire
     private float _nextFire;    // time before next shot
 
     void Update()
     {
+        // check if fire button is pressed and fire only if enough time has passed
         if (Input.GetButton("Fire1") && Time.time > _nextFire)
         {
             _nextFire = Time.time + fireRate;
