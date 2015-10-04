@@ -6,6 +6,9 @@
 // Date last Modified: 
 // File description: 
 // Revision history:
+
+// Reference: https://unity3d.com/learn/tutorials/modules/beginner/live-training-archive/2d-scrolling-backgrounds
+
 using UnityEngine;
 using System.Collections;
 
