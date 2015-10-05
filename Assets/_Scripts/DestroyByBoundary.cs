@@ -12,9 +12,9 @@ using System.Collections;
 // Destroy objects leaving boundary 
 public class DestroyByBoundary : MonoBehaviour {
 
-    void OnTriggerExit(Collider other)
+    void OnTriggerExit (Collider other)
     {
         Destroy(other.gameObject);
-
+        
     }
 }

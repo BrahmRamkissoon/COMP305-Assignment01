@@ -4,7 +4,7 @@
 // Last Modified by: Brahm Ramkissoon
 // Date created: 01/10/2015
 // Date last Modified: 
-// File description: 
+// File description: Scroll the background
 // Revision history:
 
 // Reference: https://unity3d.com/learn/tutorials/modules/beginner/live-training-archive/2d-scrolling-backgrounds

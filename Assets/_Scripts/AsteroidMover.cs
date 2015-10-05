@@ -22,4 +22,17 @@ public class AsteroidMover : MonoBehaviour
         GetComponent<Rigidbody>().velocity = transform.forward * Random.Range(speedMin, speedMax);
         
     }
-}
+
+    // Devise method for asteroids to bump and push each other
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.tag == "Asteroid")
+        {
+            Debug.Log("An Asteroid hit me");
+        }
+
+    }
+    
+ }
+    
+
