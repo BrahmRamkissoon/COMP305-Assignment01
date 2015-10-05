@@ -22,19 +22,14 @@ public class DestroyByContact : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        // Ignore boundary collision
-        if (other.tag == "Boundary")
+        // Ignore collision with Boundary or other objects of same type
+        if (other.tag == "Boundary" || other.tag == "Asteroid")
         {
             return;
         }
+        
         // Create explosion at object position, rotation
         Instantiate(explosion, transform.position, transform.rotation);
-
-        if (other.tag == "Asteroid")
-        {
-            // need to add code for physcis
-            return;
-        }
 
         // Create explosion at player object position, rotation
         if (other.tag == "Player")

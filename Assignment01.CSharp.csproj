@@ -73,6 +73,8 @@
     <Compile Include="Assets\_Scripts\BGScroller.cs" />
     <Compile Include="Assets\_Scripts\DestroyByBoundary.cs" />
     <Compile Include="Assets\_Scripts\DestroyByContact.cs" />
+    <Compile Include="Assets\_Scripts\DestroyByTime.cs" />
+    <Compile Include="Assets\_Scripts\GameController.cs" />
     <Compile Include="Assets\_Scripts\Mover.cs" />
     <Compile Include="Assets\_Scripts\PlayerController.cs" />
     <Compile Include="Assets\_Scripts\RandomRotator.cs" />
