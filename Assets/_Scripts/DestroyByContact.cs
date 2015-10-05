@@ -9,6 +9,7 @@
 //      Object to Boundary 
 // Revision history:    -   all collisions produce explosions except with Boundary
 //                      -   added explosion exception: asteroid to asteroid collisions
+//                      -   added check if player is alive to work with scoring
 
 using UnityEngine;
 using System.Collections;
@@ -17,27 +18,57 @@ using System.Collections;
 public class DestroyByContact : MonoBehaviour
 {
 
-    public GameObject explosion;            // Explosion effect for object
-    public GameObject playerExplosion;      // Explosion effect for player object explosion
+    public GameObject explosion; // Explosion effect for asteroid object
+    public GameObject playerExplosion; // Explosion effect for _player object explosion
 
-    void OnTriggerEnter(Collider other)
+    public int scoreValue; // Score value for destroying an asteroid object 
+    private ScoreboardController _scoreboardController; // Hold reference to GameController
+
+
+    private void Start()
     {
-        // Ignore collision with Boundary or other objects of same type
+        // Find reference to _scoreboardController instance and assign to _scoreboardController
+        GameObject scoreboardControllerObject = GameObject.FindGameObjectWithTag("ScoreboardController");
+        if (scoreboardControllerObject != null)
+        {
+            _scoreboardController = scoreboardControllerObject.GetComponent<ScoreboardController>();
+        }
+        if (scoreboardControllerObject == null)
+        {
+            Debug.Log("Cannot find 'ScoreboardController' script");
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        
+        // Ignore collision with Boundary
         if (other.tag == "Boundary" || other.tag == "Asteroid")
         {
             return;
         }
-        
-        // Create explosion at object position, rotation
+        // Create explosion at asteroid object position, rotation
         Instantiate(explosion, transform.position, transform.rotation);
 
-        // Create explosion at player object position, rotation
         if (other.tag == "Player")
         {
-            Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
+            // check we have enough lives and remove life if _player is not dead
+            if (this._scoreboardController.RemoveLife() != true)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            else
+            {
+                Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
+                Destroy(other.gameObject); // player object is destroyed
+                Destroy(gameObject); // asteroid object is destroyed
+                return;
+            }
         }
-        
-        Destroy(other.gameObject);      
-        Destroy(gameObject);
-        }
+
+        _scoreboardController.AddScore(scoreValue);
+        Destroy(other.gameObject); // player bolt object is destroyed
+        Destroy(gameObject); // asteroid object is destroyed
+    }
 }

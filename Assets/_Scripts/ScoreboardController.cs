@@ -12,39 +12,73 @@ using System.Collections;
 
 public class ScoreboardController : MonoBehaviour
 {
-
+    // PUBLIC INSTANCE VARIABLES+++++++++++++++++++++++++++
     public Text scoreLabel;
     public Text livesLabel;
     public Text healthLabel;
-
-    public int scoreValue = 0;
-
-    public int livesValue = 5;
-    public int maxHealth = 100;
-    public int currentHealth;
+    
+    public int _maxHealth;
     public int hitByAsteroid = 100;
+    //public int hitByEnemy = 50;   // not yet implemented
 
+    // PRIVATE INSTANCE VARIABLES+++++++++++++++++++++++++++
+    private int _scoreValue;
+    private int _livesValue;
+    private int _currentHealth;
     private bool isDead;
     private bool isDamaged;
-    //public int hitByEnemy = 50;
+    
 
     void Awake()
     {
-        currentHealth = maxHealth;
+        this._SetGUIValues();
     }
     void Start()
     {
-        this._SetScore();
+        this._UpdateGUI();
     }
 
-    private void _SetScore()
+    void Update()
     {
-        this.scoreLabel.text = "Score: " + this.scoreValue;
-        this.livesLabel.text = "Lives: " + this.livesValue;
-        this.healthLabel.text = "Health: " + this.currentHealth;
+        this._UpdateGUI();
     }
 
-    void OnTriggerEnter(Collider other)
+    // Allow other gameObjects to update score value 
+    public void AddScore(int newScoreValue)
+    {
+        this._scoreValue += newScoreValue;
+    }
+
+    // Allow other gameObjects to update life value
+    public bool RemoveLife()
+    {
+        if (this._livesValue > 0)
+        {
+            this._livesValue--;
+            return this.isDead = false;
+        }
+        else
+        {
+            return this.isDead = true;
+        }
+    }
+
+    // 
+    private void _SetGUIValues()
+    {
+        this._scoreValue = 0;
+        this._livesValue = 3;
+        this._currentHealth = _maxHealth;
+    }
+
+    private void _UpdateGUI()
+    {
+        this.scoreLabel.text = "Score: " + this._scoreValue;
+        this.livesLabel.text = "Lives: " + this._livesValue;
+        this.healthLabel.text = "Health: " + this._currentHealth;
+    }
+
+   void OnTriggerEnter(Collider other)
     {
         // Hit by Asteroid
         if (other.tag == "Asteroid")
@@ -56,10 +90,10 @@ public class ScoreboardController : MonoBehaviour
     void TakeDamage(int amount)
     {
         isDamaged = true;
-        currentHealth -= amount;
-        _SetScore();
+        _currentHealth -= amount;
+        _UpdateGUI();
 
-        if (currentHealth <= 0 && !isDead)
+        if (_currentHealth <= 0 && !isDead)
         {
             Death();
         }
@@ -70,8 +104,9 @@ public class ScoreboardController : MonoBehaviour
     {
         isDead = true;
        
-        this.livesValue -= 1;
-        _SetScore();
+        this._livesValue -= 1;
+        _UpdateGUI();
     }
-    
+
+   
 }
