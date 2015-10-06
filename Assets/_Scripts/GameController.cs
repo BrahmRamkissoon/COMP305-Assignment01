@@ -9,6 +9,7 @@
 //                      -   added loop for spawning waves
 //                      -   added coroutine to wait between hazard spawns
 //                      -   added while loop to get wait time between spawnWaves
+//                      -   added game over logic
 
 using UnityEngine;
 using System.Collections;
@@ -22,10 +23,22 @@ public class GameController : MonoBehaviour
     public float spawnWait;         // wait time between waves
     public float startWait;         // wait time before game starts
     public float waveWait;          // wait time between waves
+    private ScoreboardController _scoreboardController;     // hold reference to ScoreboardController 
 
     void Start()
     {
         StartCoroutine(SpawnWaves());
+
+        // Find reference of ScoreboardController and assign to _scoreboardController
+        GameObject scoreboardControllerObject = GameObject.FindGameObjectWithTag("ScoreboardController");
+        if (scoreboardControllerObject != null)
+        {
+            _scoreboardController = scoreboardControllerObject.GetComponent<ScoreboardController>();
+        }
+        if (scoreboardControllerObject == null)
+        {
+            Debug.Log("Cannot find 'ScoreboardController' script");
+        }
     }
 
     IEnumerator SpawnWaves()
@@ -43,9 +56,14 @@ public class GameController : MonoBehaviour
                 Instantiate(hazard, spawnPosition, spawnRotation);
                 yield return new WaitForSeconds(spawnWait);
             }
-
             yield return new WaitForSeconds(waveWait);
+
+            if (_scoreboardController.IsGameOver())
+            {
+                _scoreboardController.restartLabel.text = "Press 'R' to Restart";
+                _scoreboardController.SetRestart(true);
+                break;
+            }
         }
     }
-    
 }

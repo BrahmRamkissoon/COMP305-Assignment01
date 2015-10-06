@@ -16,6 +16,8 @@ public class ScoreboardController : MonoBehaviour
     public Text scoreLabel;
     public Text livesLabel;
     public Text healthLabel;
+    public Text restartLabel;
+    public Text gameOverLabel;
     
     public int _maxHealth;
     public int hitByAsteroid = 100;
@@ -25,22 +27,37 @@ public class ScoreboardController : MonoBehaviour
     private int _scoreValue;
     private int _livesValue;
     private int _currentHealth;
-    private bool isDead;
-    private bool isDamaged;
+    
+    private bool _isDead;
+    private bool _isDamaged;
+
+    private bool _restart;
+    private bool _gameOver;
     
 
     void Awake()
     {
         this._SetGUIValues();
     }
-    void Start()
-    {
-        this._UpdateGUI();
-    }
+
+    
 
     void Update()
     {
         this._UpdateGUI();
+
+        if (_restart)
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                Application.LoadLevel(Application.loadedLevel);
+            }
+        }
+
+        if (_gameOver)
+        {
+            gameOverLabel.text = "Game Over!";
+        }
     }
 
     // Allow other gameObjects to update score value 
@@ -52,14 +69,14 @@ public class ScoreboardController : MonoBehaviour
     // Allow other gameObjects to update life value
     public bool RemoveLife()
     {
-        if (this._livesValue > 0)
+        this._livesValue--;
+        if (this._livesValue >= 1)
         {
-            this._livesValue--;
-            return this.isDead = false;
+            return this._isDead = false;
         }
         else
         {
-            return this.isDead = true;
+            return this._isDead = true;
         }
     }
 
@@ -69,6 +86,10 @@ public class ScoreboardController : MonoBehaviour
         this._scoreValue = 0;
         this._livesValue = 3;
         this._currentHealth = _maxHealth;
+        this._isDead = false;
+        this._isDamaged = false;
+        this._gameOver = false;
+        this._restart = false;
     }
 
     private void _UpdateGUI()
@@ -76,6 +97,21 @@ public class ScoreboardController : MonoBehaviour
         this.scoreLabel.text = "Score: " + this._scoreValue;
         this.livesLabel.text = "Lives: " + this._livesValue;
         this.healthLabel.text = "Health: " + this._currentHealth;
+    }
+
+    public bool IsGameOver()
+    {
+        return this._gameOver;
+    }
+
+    public void GameOver()
+    {
+        gameOverLabel.text = "Game Over!";
+        _gameOver = true;
+    }
+    public void SetRestart(bool restart)
+    {
+        this._restart = true;
     }
 
    void OnTriggerEnter(Collider other)
@@ -89,11 +125,11 @@ public class ScoreboardController : MonoBehaviour
 
     void TakeDamage(int amount)
     {
-        isDamaged = true;
+        _isDamaged = true;
         _currentHealth -= amount;
         _UpdateGUI();
 
-        if (_currentHealth <= 0 && !isDead)
+        if (_currentHealth <= 0 && !_isDead)
         {
             Death();
         }
@@ -102,7 +138,7 @@ public class ScoreboardController : MonoBehaviour
     // On player death
     void Death()
     {
-        isDead = true;
+        _isDead = true;
        
         this._livesValue -= 1;
         _UpdateGUI();

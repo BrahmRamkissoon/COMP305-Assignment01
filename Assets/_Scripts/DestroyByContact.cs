@@ -27,7 +27,7 @@ public class DestroyByContact : MonoBehaviour
 
     private void Start()
     {
-        // Find reference to _scoreboardController instance and assign to _scoreboardController
+        // Find reference of ScoreboardController and assign to _scoreboardController
         GameObject scoreboardControllerObject = GameObject.FindGameObjectWithTag("ScoreboardController");
         if (scoreboardControllerObject != null)
         {
@@ -63,6 +63,7 @@ public class DestroyByContact : MonoBehaviour
                 Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
                 Destroy(other.gameObject); // player object is destroyed
                 Destroy(gameObject); // asteroid object is destroyed
+                _scoreboardController.GameOver();
                 return;
             }
         }
