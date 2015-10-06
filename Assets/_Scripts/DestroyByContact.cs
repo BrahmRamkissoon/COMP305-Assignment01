@@ -52,6 +52,7 @@ public class DestroyByContact : MonoBehaviour
 
         if (other.tag == "Player")
         {
+            
             // check we have enough lives and remove life if _player is not dead
             if (this._scoreboardController.RemoveLife() != true)
             {

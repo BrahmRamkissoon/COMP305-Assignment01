@@ -20,7 +20,7 @@ public class ScoreboardController : MonoBehaviour
     public Text gameOverLabel;
     
     public int _maxHealth;
-    public int hitByAsteroid = 100;
+    public int hitByAsteroid = 50;
     //public int hitByEnemy = 50;   // not yet implemented
 
     // PRIVATE INSTANCE VARIABLES+++++++++++++++++++++++++++
@@ -123,7 +123,7 @@ public class ScoreboardController : MonoBehaviour
         }
     }
 
-    void TakeDamage(int amount)
+    public void TakeDamage(int amount)
     {
         _isDamaged = true;
         _currentHealth -= amount;
